@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+
+require 'commander/import'
+require 'ruploy'
+
+program :name,        'Ruploy'
+program :version,     '0.0.1'
+program :description, 'Generates init.d scripts to manage Rack apps using RVM'
+
+command :generate do |c|
+  c.syntax      = 'ruploy generate init_script [options]'
+  c.description = 'Generates an init.d script for a given Rack application and prints it in init_script.'
+
+  c.option '-n', '--name NAME',          'Name of your application (default: current directory name)'
+  c.option '-d', '--directory PATH',     'Root path of the application (default: current directory)'
+  c.option '-a', '--address HOST',       'Bind to HOST address (default: 127.0.0.1)'
+  c.option '-p', '--port NUMBER',        'Use the given port number (default: 3000)'
+  c.option '-e', '--environment ENV',    'Framework environment (default: production)'
+  c.option '-u', '--user USERNAME',      'User to run as. Ignored unless running as root (default: www-data)'
+  c.option       '--log-file FILENAME',  'Where to write log messages (default: /var/log/rack-$PROCNAME-$PORT.log)'
+  c.option       '--pid-file FILENAME',  'Where to store the PID file (default: /var/lock/rack-$PROCNAME-$PORT)'
+  c.option '-s', '--server-type SERVER', 'Server type, can be "thin" or "passenger" (default: thin)'
+  c.option       '--dependencies DEPS',  'Dependencies of the init script (default: apache2)'
+  c.option '-i', '--independent',        'Print the generic code in the file instead of including it'
+  c.option       '--use-defaults',       'Do not ask for missing informations and use default values'
+
+  c.action do |args, opts|
+    script_file = args.shift
+    app_config  = Ruploy.get_config(args, opts.__hash__)
+    init_file   = Ruploy.generate_init_file(app_config, opts.independent)
+
+    File.open(script_file, 'w') do |f|
+      f.puts init_file
+    end
+
+    File.chmod(0755, script_file)
+  end
+end
+alias_command :g, :generate
+default_command :generate
+
+command :deploy do |c|
+  c.syntax      = 'ruploy deploy init_script [service_name]'
+  c.description = 'Copies the init script to /etc/init.d/<service_name> and calls update-rc.d.'
+
+  c.option '-f', '--force', 'Force symlink creation if a file already exists'
+
+  c.action do |args, opts|
+    script, name = args
+    path         = File.expand_path(script)
+    name       ||= File.basename(script)
+    target       = "/etc/init.d/#{name}"
+
+    print "Deploying #{name}... "
+
+    File.delete(target) if File.exists?(target) && opts.force
+    File.symlink(path, target)
+    `update-rc.d #{name} defaults`
+
+    puts '[OK]'
+  end
+end

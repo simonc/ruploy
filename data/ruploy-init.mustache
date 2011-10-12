@@ -1,0 +1,28 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          {{proc_name}}
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Should-Start:      {{dependencies}}
+# Should-Stop:       {{dependencies}}
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/Stop {{name}}
+# Description:       Manage the actions related to the passenger instance of {{name}}
+#                    you can use start, stop, restart and status
+### END INIT INFO
+
+NAME="{{name}}"
+PROCNAME="{{proc_name}}"
+
+DIRECTORY="{{directory}}"
+ADDRESS="{{address}}"
+PORT="{{port}}"
+ENVIRONMENT="{{environment}}"
+USER="{{user}}"
+LOGFILE="{{log_file}}"
+PIDFILE="{{pid_file}}"
+OPTIONS="{{options}}"
+SERVER="{{server_type}}"
+
+{{{ruploy_base}}}
