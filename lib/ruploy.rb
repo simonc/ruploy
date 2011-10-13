@@ -11,8 +11,7 @@ module Ruploy
     :pid_file     => '/var/lock/rack-$PROCNAME-$PORT',
     :user         => 'www-data',
     :dependencies => 'apache2',
-    :server_type  => 'thin',
-    :options      => '--daemonize'
+    :server_type  => 'thin'
   }
 
   class << self
@@ -26,6 +25,7 @@ module Ruploy
         }
       end
 
+      config[:options]   = '--daemonize'
       config[:options]  << " #{args.join(' ')}" if args.any?
       config[:proc_name] = config[:name].gsub(/\W/, '_').squeeze('_').downcase
 
