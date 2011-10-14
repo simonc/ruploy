@@ -38,7 +38,7 @@ values for the options you didn't provided, use the `--use-defaults` option.
 
 Here is an example of `ruploy generate` usage :
 
-    $ ruploy generate my-scrip                 \
+    $ ruploy generate my-script                \
         --name              MyApp              \
         --directory         /path/to/my/app    \
         --address           0.0.0.0            \
@@ -113,10 +113,13 @@ The `deploy` command links your script in `/etc/init.d` and then calls
 `update-rc.d`.
 
 It takes two parameters. The first one is the script name, the second is the
-service name you want to use :
+service name you want to use and is optional :
 
     $ ruploy deploy my-script service-name
     Deploying service-name... [OK]
+    
+    $ ruploy deploy my-script
+    Deploying my-script... [OK]
 
 ## Contribution
 
