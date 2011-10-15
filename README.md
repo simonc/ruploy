@@ -3,7 +3,7 @@
 If you are managing Rack applications on your server and use RVM to work with
 several versions of Ruby, that you use either Passenger-Standalone or Thin, Ruploy can help you.
 
-Ruploy can generate init.d scripts to start/restart/stop your Rack applications like any services.
+Ruploy can generate init.d scripts to start/restart/stop your Rack applications like any service.
 
 ## Installation
 
