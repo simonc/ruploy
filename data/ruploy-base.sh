@@ -17,15 +17,9 @@ ok_ko() {
 # returns the name of the running server process
 server_process() {
   case $SERVER in
-    passenger)
-      echo "nginx"
-      ;;
-    thin)
-      echo "thin"
-      ;;
-    *)
-      echo "unknown_server"
-      ;;
+    passenger) echo "nginx";;
+    thin)      echo "thin";;
+    *)         echo "unknown_server";;
   esac
 }
 
@@ -42,43 +36,41 @@ server_pid() {
 # Returns the log-file option for the given server type
 logfile_option() {
   case $SERVER in
-    passenger)
-      echo "--log-file"
-      ;;
-    thin)
-      echo "--log"
-      ;;
-    *)
-      echo "unknown_server"
-      ;;
+    passenger) echo "--log-file";;
+    thin)      echo "--log";;
+    *)         echo "unknown_server";;
   esac
 }
 
 # Returns the pid-file option for the given server type
 pidfile_option() {
   case $SERVER in
-    passenger)
-      echo "--pid-file"
-      ;;
-    thin)
-      echo "--pid"
-      ;;
-    *)
-      echo "unknown_server"
-      ;;
+    passenger) echo "--pid-file";;
+    thin)      echo "--pid";;
+    *)         echo "unknown_server";;
+  esac
+}
+
+# Returns the directory opion for the given server type
+directory_option() {
+  case $SERVER in
+    passenger) echo "";;
+    thin)      echo "--chdir";;
+    *)         echo "unknown_server";;
   esac
 }
 
 # Starts the given server instance
 ruploy_start() {
   echo -n "Starting ${NAME}... "
-  $SERVER start $DIRECTORY      \
-    --address      $ADDRESS     \
-    --port         $PORT        \
-    --environment  $ENVIRONMENT \
-    --user         $USER        \
-    $(pidfile_option) $PIDFILE  \
-    $(logfile_option) $LOGFILE  \
+  $SERVER start                     \
+    $(directory_option) $DIRECTORY  \
+    --address      $ADDRESS         \
+    --port         $PORT            \
+    --environment  $ENVIRONMENT     \
+    --user         $USER            \
+    $(pidfile_option) $PIDFILE      \
+    $(logfile_option) $LOGFILE      \
     $OPTIONS > /dev/null
   ok_ko
 }
