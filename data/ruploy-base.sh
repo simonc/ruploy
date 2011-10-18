@@ -22,7 +22,7 @@ server_process() {
 # Returns the PID of the given server instance
 server_pid() {
   if [ -e "$PIDFILE" ]; then
-    if pidof $(server_process) | tr ' ' '\n' | grep -w $(cat $PIDFILE); then
+    if pidof $(server_process) | tr ' ' '\n' | grep -w "$(cat $PIDFILE)"; then
       return 0
     fi
   fi
@@ -79,7 +79,7 @@ ruploy_start() {
 # Stops the given server instance
 ruploy_stop() {
   echo -n "Stopping ${NAME}... "
-  $(bundler_prefix) $SERVER stop --pid-file $PIDFILE > /dev/null 2>&1
+  $(bundler_prefix) $SERVER stop $(pidfile_option) $PIDFILE > /dev/null 2>&1
   ok_ko
 }
 
