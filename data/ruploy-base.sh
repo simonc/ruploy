@@ -3,18 +3,14 @@ ok_ko() {
   local status=$?
 
   case $status in
-    0)
-      echo "[OK]"
-      ;;
-    *)
-      echo "[KO]"
-      ;;
+    0) echo "[OK]";;
+    *) echo "[KO]";;
   esac
 
   return $status
 }
 
-# returns the name of the running server process
+# Returns the name of the running server process
 server_process() {
   case $SERVER in
     passenger) echo "nginx";;
