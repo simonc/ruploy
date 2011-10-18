@@ -14,7 +14,7 @@ ok_ko() {
 server_process() {
   case $SERVER in
     passenger) echo "nginx";;
-    thin)      echo "thin";;
+    thin)      echo "ruby";;
     *)         echo "unknown_server";;
   esac
 }
