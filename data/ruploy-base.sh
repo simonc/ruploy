@@ -56,25 +56,30 @@ directory_option() {
   esac
 }
 
+# Returns the bundle exec prefix if it is needed
+bundler_prefix() {
+  [[ -e "$DIRECTORY/Gemfile" ]] && echo "bundle exec"
+}
+
 # Starts the given server instance
 ruploy_start() {
   echo -n "Starting ${NAME}... "
-  $SERVER start                     \
-    $(directory_option) $DIRECTORY  \
-    --address      $ADDRESS         \
-    --port         $PORT            \
-    --environment  $ENVIRONMENT     \
-    --user         $USER            \
-    $(pidfile_option) $PIDFILE      \
-    $(logfile_option) $LOGFILE      \
-    $OPTIONS > /dev/null
+  $(bundler_prefix)   $SERVER start \
+  $(directory_option) $DIRECTORY    \
+  --address           $ADDRESS      \
+  --port              $PORT         \
+  --environment       $ENVIRONMENT  \
+  --user              $USER         \
+  $(pidfile_option)   $PIDFILE      \
+  $(logfile_option)   $LOGFILE      \
+  $OPTIONS > /dev/null
   ok_ko
 }
 
 # Stops the given server instance
 ruploy_stop() {
   echo -n "Stopping ${NAME}... "
-  $SERVER stop --pid-file $PIDFILE > /dev/null 2>&1
+  $(bundler_prefix) $SERVER stop --pid-file $PIDFILE > /dev/null 2>&1
   ok_ko
 }
 
