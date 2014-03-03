@@ -1,3 +1,5 @@
+**ATTENTION:** This project is not maintained anymore. Use Passenger or Capistrano ;)
+
 # Ruploy
 
 If you are managing Rack applications on your server and use RVM to work with
